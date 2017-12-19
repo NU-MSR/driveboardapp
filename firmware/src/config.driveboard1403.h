@@ -40,7 +40,7 @@
 #define CONFIG_BEAMDYNAMICS              // adjust intensity during accel/decel
 #define CONFIG_BEAMDYNAMICS_START 0.05   // 0-1.0, offset after which to apply
 #define CONFIG_BEAMDYNAMICS_EVERY 16     // freq as multiples of steps impulses
-
+#define MINIMUM_LASER_POWER (46) // Assume laser doesn't fire below 18% power (0.18*255 ~= 46)
 
 #define CONFIG_X_STEPS_PER_MM 88.88888888 //microsteps/mm
 #define CONFIG_Y_STEPS_PER_MM 90.90909090 //microsteps/mm
