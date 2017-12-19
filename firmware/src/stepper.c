@@ -593,13 +593,20 @@ inline void adjust_beam_dynamics( uint32_t steps_per_minute ) {
         (PWM_MODE == STATIC_FREQ_PD5) || (PWM_MODE == STATIC_FREQ_PD6)
       uint8_t adjusted_intensity = current_block->nominal_laser_intensity *
                                    ((float)steps_per_minute/(float)current_block->nominal_rate);
-      adjusted_intensity = max(adjusted_intensity, 0);
+      #ifdef MINIMUM_LASER_POWER
+        adjusted_intensity = max(adjusted_intensity, MINIMUM_LASER_POWER);
+      #else
+        adjusted_intensity = max(adjusted_intensity, 0);
+	  #endif
     #elif PWM_MODE == SYNCED_FREQ
       uint8_t adjusted_intensity = current_block->nominal_laser_intensity *
                      (CONFIG_BEAMDYNAMICS_START + (1.0-CONFIG_BEAMDYNAMICS_START)*
                      (((float)steps_per_minute/(float)current_block->nominal_rate)));
     #endif
-    control_laser_intensity(adjusted_intensity);
+    if (current_block->nominal_laser_intensity == 0)
+      control_laser_intensity(0);
+	else
+      control_laser_intensity(adjusted_intensity);
   #else
   control_laser_intensity(current_block->nominal_laser_intensity);
   #endif
